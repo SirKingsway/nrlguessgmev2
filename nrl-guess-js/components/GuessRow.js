@@ -1,12 +1,10 @@
-export default function GuessRow({ guess, answer }) {
-  // Match logic
+function GuessRow({ guess, answer }) {
   const isCountryMatch = guess.birth_country === answer.birth_country;
   const isPositionMatch = guess.position === answer.position;
   const isTeamMatch = guess.teams.some((team) =>
     answer.teams.includes(team)
   );
 
-  // Style helper
   const getClass = (match) =>
     match
       ? "bg-green-100 text-green-800 border border-green-300"
@@ -27,3 +25,5 @@ export default function GuessRow({ guess, answer }) {
     </div>
   );
 }
+
+export default GuessRow;
