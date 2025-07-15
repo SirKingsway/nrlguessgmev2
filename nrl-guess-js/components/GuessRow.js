@@ -1,29 +1,28 @@
-import { useState, useEffect } from "react";
-import GuessInput from "../components/GuessInput";
-import GuessRow from "../components/GuessRow";
+export default function GuessRow({ guess, answer }) {
+  // Match logic
+  const isCountryMatch = guess.birth_country === answer.birth_country;
+  const isPositionMatch = guess.position === answer.position;
+  const isTeamMatch = guess.teams.some((team) =>
+    answer.teams.includes(team)
+  );
 
-export default function Home() {
-  const [guesses, setGuesses] = useState([]);
-  const [answer, setAnswer] = useState(null);
-
-  useEffect(() => {
-    fetch("/api/target")
-      .then((res) => res.json())
-      .then((data) => setAnswer(data));
-  }, []);
-
-  const handleGuess = (player) => {
-    setGuesses([...guesses, player]);
-  };
+  // Style helper
+  const getClass = (match) =>
+    match
+      ? "bg-green-100 text-green-800 border border-green-300"
+      : "bg-red-100 text-red-800 border border-red-300";
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold text-center mb-6">NRL Guessing Game</h1>
-      {answer && <GuessInput onGuess={handleGuess} />}
-      <div className="mt-6 space-y-3 max-w-2xl mx-auto">
-        {guesses.map((guess, index) => (
-          <GuessRow key={index} guess={guess} answer={answer} />
-        ))}
+    <div className="grid grid-cols-4 gap-4 p-3 border rounded bg-white shadow text-sm">
+      <div className="font-medium">{guess.name}</div>
+      <div className={`px-2 py-1 rounded text-center ${getClass(isCountryMatch)}`}>
+        {guess.birth_country}
+      </div>
+      <div className={`px-2 py-1 rounded text-center ${getClass(isTeamMatch)}`}>
+        {guess.teams.join(", ")}
+      </div>
+      <div className={`px-2 py-1 rounded text-center ${getClass(isPositionMatch)}`}>
+        {guess.position}
       </div>
     </div>
   );
